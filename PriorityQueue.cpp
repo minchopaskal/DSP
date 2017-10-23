@@ -38,7 +38,7 @@ void PriorityQueue<T,S,Compare>::copy(node* otherHead) {
     head = tmp;
     otherHead = otherHead->next;
     while(otherHead) {
-        tmp->next = new node(otherHead->data);
+        tmp->next = new node(otherHead->data, otherHead->priority);
         tmp = tmp->next;
         otherHead = otherHead->next;
     }
