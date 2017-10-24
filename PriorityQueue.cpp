@@ -46,11 +46,8 @@ void PriorityQueue<T,S,Compare>::copy(node* otherHead) {
 
 template <class T, class S, class Compare>
 void PriorityQueue<T,S,Compare>::erase() {
-    while(head) {
-        node* tmp = head;
-        head = head->next;
-        delete tmp;
-    }
+    while(head)
+        pop();
 }
 
 template <class T, class S, class Compare>
@@ -73,13 +70,6 @@ void PriorityQueue<T,S,Compare>::pop() {
 
 template <class T, class S, class Compare>
 void PriorityQueue<T,S,Compare>::push(T data, S priority) {
-    if(empty()) {
-        node* newNode = new node(data, priority, nullptr);
-        head = newNode;
-        ++size;
-        return;
-    }
-
     node* tmp = head;
     node* prev = nullptr;
 
