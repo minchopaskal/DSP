@@ -129,6 +129,7 @@ typename List<T>::node* List<T>::mergeSort(node* lst) {
 
     slow = fast = lst;
 
+    // Slicing list in two halves.
     while(fast) {
         slow = slow->next;
         fast = fast->next;
@@ -140,13 +141,17 @@ typename List<T>::node* List<T>::mergeSort(node* lst) {
     (slow->prev)->next = nullptr;
     slow->prev = nullptr;
 
+    // Recursively sort each one of the halves.
     node* lst1 = mergeSort(lst);
     node* lst2 = mergeSort(sndHalf);
+    
+    // Merging the already sorted halves.
     return mergeLists(lst1, lst2);
 }
 
 template <typename T>
 typename List<T>::node* List<T>::mergeLists(node* lst1, node* lst2) {
+    // Iterators
     node* h1 = lst1;
     node* h2 = lst2;
 
@@ -155,6 +160,8 @@ typename List<T>::node* List<T>::mergeLists(node* lst1, node* lst2) {
 
     newHead = curr;
 
+    // After getting the smallest element
+    // advance the coresponding iterator forward.
     if(h1->data < h2->data) {
         h1 = h1->next;
         if(h1)
@@ -167,6 +174,7 @@ typename List<T>::node* List<T>::mergeLists(node* lst1, node* lst2) {
 
     curr->next = nullptr;
 
+    // Do the above thing in a loop
     while(h1 && h2) {
         if(h1->data <= h2->data) {
             curr->next = h1;
@@ -179,13 +187,18 @@ typename List<T>::node* List<T>::mergeLists(node* lst1, node* lst2) {
         curr = curr->next;
     }
 
+    // At the end one of the lists is null (or both)
+    // We concatenate the full list at the end of the already
+    // made one.
     if(!h1) {
         curr->next = h2;
-        h2->prev = curr;
+        if(h2)
+            h2->prev = curr;
     }
     if(!h2) {
         curr->next = h1;
-        h1->prev = curr;
+        if(h1)
+            h1->prev = curr;
     }
 
     return newHead;
