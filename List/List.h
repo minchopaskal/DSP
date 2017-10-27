@@ -52,7 +52,6 @@ public:
     void pop_front();
 
     // Operations
-    //TODO implement sort() with MergeSort
     void sort();
     void reverse();
     void print() const;
