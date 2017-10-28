@@ -1,4 +1,4 @@
-#include "PriorityQueue.h"
+#include "PriorityQueue/PriorityQueue.h"
 
 struct StringComparison {
    bool operator() (std::string fstString, std::string sndString) const {

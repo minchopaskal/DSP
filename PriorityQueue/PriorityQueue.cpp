@@ -52,6 +52,9 @@ void PriorityQueue<T,S,Compare>::erase() {
 
 template <class T, class S, class Compare>
 void PriorityQueue<T,S,Compare>::print() const {
+    std::cout << "Empty: " << (empty() ? "true" : "false") << std::endl;
+    std::cout << "Size: " << getSize() << std::endl;
+    std::cout << "Top: " << top() << std::endl;
     node* tmp = head;
     while(tmp) {
         std::cout << tmp->data << " ";

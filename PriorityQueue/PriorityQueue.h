@@ -5,14 +5,14 @@
 #ifndef SDP_SEMINAR_PRIORITYQUEUE_H
 #define SDP_SEMINAR_PRIORITYQUEUE_H
 
-#include <zconf.h>
+#include <cstddef>
 
 /** Priority Queue
  *  push() - O(n)
  *  pop() - O(1)
  */
 
-template <class T = int, class S = int, class Compare = std::less<int>>
+template <class T, class S, class Compare>
 class PriorityQueue {
 private:
     struct node {
@@ -24,7 +24,7 @@ private:
     };
 
     node* head;
-    size_t size;
+    std::size_t size;
     Compare compareFunc;
 
     void copy(node*);
@@ -38,8 +38,8 @@ public:
     ~PriorityQueue();
 
     // Capacity
-    bool empty() const { return size == 0; }
-    size_t getSize() const { return size; }
+    bool empty() const { return !head; }
+    std::size_t getSize() const { return size; }
 
     // Element access
     T top() const { return head->data; }
