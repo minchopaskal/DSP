@@ -1,8 +1,8 @@
 //
 // Created by ellie on 23.10.17.
 //
-#ifndef PRIORITY_QUEUE_CPP
-#define PRIORITY_QUEUE_CPP
+#ifndef _PRIORITY_QUEUE_CPP
+#define _PRIORITY_QUEUE_CPP
 
 #include <iostream>
 #include "PriorityQueue.h"
@@ -89,4 +89,4 @@ void PriorityQueue<T,S,Compare>::push(T data, S priority) {
     ++size;
 }
 
-#endif
+#endif //_PRIORITY_QUEUE_CPP

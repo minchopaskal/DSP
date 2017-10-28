@@ -2,8 +2,8 @@
 // Created by ellie on 23.10.17.
 //
 
-#ifndef SDP_SEMINAR_PRIORITYQUEUE_H
-#define SDP_SEMINAR_PRIORITYQUEUE_H
+#ifndef _PRIORITYQUEUE_H
+#define _PRIORITYQUEUE_H
 
 #include <cstddef>
 
@@ -52,4 +52,4 @@ public:
 
 #include "PriorityQueue.cpp"
 
-#endif //SDP_SEMINAR_PRIORITYQUEUE_H
+#endif // _PRIORITY_QUEUE_H

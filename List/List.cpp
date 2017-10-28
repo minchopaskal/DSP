@@ -1,8 +1,8 @@
 //
 // Created by ellie on 17.10.17.
 //
-#ifndef LIST_CPP
-#define LIST_CPP
+#ifndef _LIST_CPP
+#define _LIST_CPP
 
 #include <iostream>
 #include <iomanip>
@@ -222,4 +222,4 @@ void List<T>::print() const {
     std::cout << std::endl;
 }
 
-#endif
+#endif // _LIST_CPP

@@ -2,8 +2,8 @@
 // Created by ellie on 17.10.17.
 //
 
-#ifndef SDP_SEMINAR_LIST_H
-#define SDP_SEMINAR_LIST_H
+#ifndef _LIST_H
+#define _LIST_H
 
 #include <cstddef>
 
@@ -60,4 +60,4 @@ public:
 #include "List.cpp"
 
 
-#endif //SDP_SEMINAR_LIST_H
+#endif //_LIST_H
