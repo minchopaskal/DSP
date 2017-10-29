@@ -61,16 +61,9 @@ void List<T>::push_back(T data) {
 }
 
 template <typename T>
-void List<T>::pop_back() {
-    if(empty()) {
-        std::cout << "List is already empty!\n";
-        auto t = std::time(nullptr);
-        auto tm = *std::localtime(&t);
-        std::clog << "pop from empty list at: "
-                  << std::put_time(&tm, "%d-%m-%y %H-%M-%S")
-                  << std::endl;
-        return;
-    }
+bool List<T>::pop_back() {
+    if(empty())
+        return false;
     node* tmp = tail;
     if(tail)
         tail = tail->prev;
@@ -79,6 +72,7 @@ void List<T>::pop_back() {
     delete tmp;
     --size;
     if(size <= 1) head = tail;
+    return true;
 }
 
 template <typename T>
@@ -95,16 +89,9 @@ void List<T>::push_front(T data) {
 }
 
 template <typename T>
-void List<T>::pop_front() {
-    if(empty()) {
-        std::cout << "List is already empty!\n";
-        auto t = std::time(nullptr);
-        auto tm = *std::localtime(&t);
-        std::clog << "pop from empty list at: "
-                  << std::put_time(&tm, "%d-%m-%y %H-%M-%S")
-                  << std::endl;
-        return;
-    }
+bool List<T>::pop_front() {
+    if(empty())
+        return false;
     node* tmp = head;
     head = head->next;
     if(head)
@@ -113,6 +100,7 @@ void List<T>::pop_front() {
     delete tmp;
     --size;
     if(size <= 1) tail = head;
+    return true;
 }
 
 template <typename T>

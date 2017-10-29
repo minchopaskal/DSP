@@ -12,14 +12,14 @@
  *  pop() - O(1)
  */
 
-template <class T, class S, class Compare>
+template <class T = int, class S = int, class Compare = std::less<int>>
 class PriorityQueue {
 private:
     struct node {
         T data;
         S priority;
         node* next;
-        node(T data, S priority = 0, node* next = nullptr) :
+        node(const T& data, const S& priority, node* next = nullptr) :
                 data(data), priority(priority), next(next) { }
     };
 

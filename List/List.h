@@ -14,7 +14,7 @@ private:
         T data;
         node* prev;
         node* next;
-        node(T data, node* prev, node* next) {
+        node(const T& data, node* prev, node* next) {
             this->data = data;
             this->prev = prev;
             this->next = next;
@@ -47,9 +47,9 @@ public:
 
     // Modifiers
     void push_back(T);
-    void pop_back();
+    bool pop_back();
     void push_front(T);
-    void pop_front();
+    bool pop_front();
 
     // Operations
     void sort();
