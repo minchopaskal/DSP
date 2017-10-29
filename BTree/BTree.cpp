@@ -11,7 +11,7 @@
 
 template <class T, class Compare>
 void swap(BTree<T, Compare>& tree, BTree<T, Compare>& other) {
-    //using std::swap;
+    using std::swap;
     std::swap(tree.root, other.root);
 }
 
