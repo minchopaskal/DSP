@@ -35,7 +35,8 @@ private:
     const node* getElement(const char*, const node*) const;
     const node* getNodeBySymbol(char, const node*) const;
 
-    std::ostream& print(const node*, std::ostream& os = std::cout) const;
+    void printOrdered(const node*, std::ostream& os = std::cout) const;
+    void printScheme(const node*, std::ostream& os = std::cout) const;
 
 public:
     BTree();
@@ -51,6 +52,8 @@ public:
 
     // Redundant function after implementing operator<<
     //void print() const { print(root); };
+
+    void printScheme() const;
 
     /*
      * Exercises from

@@ -11,12 +11,26 @@
 
 #include "BTree.h"
 
+
+/*
+ * Friend functions
+ */
 template <class T, class Compare>
 void swap(BTree<T, Compare>& tree, BTree<T, Compare>& other) {
     using std::swap;
     std::swap(tree.root, other.root);
 }
 
+template <class T, class Compare>
+std::ostream& operator<<(std::ostream& os, const BTree<T,Compare>& tree) {
+    //tree.printOrdered(tree.root, os);
+    tree.printScheme(tree.root, os);
+    return os;
+};
+
+/*
+ * Big Four
+ */
 template <class T, class Compare>
 BTree<T, Compare>::BTree() : root(nullptr) { }
 
@@ -44,6 +58,10 @@ BTree<T, Compare>::~BTree() {
     erase(root);
 }
 
+
+/*
+ * Private help functions
+ */
 template <class T, class Compare>
 typename BTree<T, Compare>::node*
 BTree<T, Compare>::copy(const node* root) {
@@ -70,6 +88,10 @@ void BTree<T, Compare>::insertOrdered(const T& data) {
     insertOrdered(data, root);
 }
 
+
+/*
+ * Functionality
+ */
 template <class T, class Compare>
 void BTree<T, Compare>::insertOrdered(const T& data, node*& root) {
     if(empty()) {
@@ -92,31 +114,48 @@ void BTree<T, Compare>::insertOrdered(const T& data, node*& root) {
 }
 
 template <class T, class Compare>
-std::ostream& BTree<T, Compare>::print(const node* root, std::ostream& os) const {
-    if(!root)
-        return os;
+void BTree<T, Compare>::printOrdered(const node* root, std::ostream& os) const {
+    if(root == nullptr) {
+        return;
+    }
 
     os << "(";
-    print(root->left, os);
+    printOrdered(root->left, os);
     os << ") ";
     os << root->data;
     os << " (";
-    print(root->right, os);
+    printOrdered(root->right, os);
     os << ")";
-    return os;
 }
 
 template <class T, class Compare>
-std::ostream& operator<<(std::ostream& os, const BTree<T,Compare>& tree) {
-    return tree.print(tree.root, os);
-};
+void BTree<T, Compare>::printScheme(const node* root, std::ostream& os) const {
+    if(root == nullptr) {
+        os << "()";
+        return;
+    }
+
+    os << "(";
+
+    os << root->data << " ";
+    printScheme(root->left, os);
+    os << " ";
+    printScheme(root->right, os);
+
+    os << ")";
+}
+
+template <class T, class Compare>
+void BTree<T, Compare>::printScheme() const {
+    printScheme(root, std::cout);
+}
 
 /*
  * Functions from exercise
  */
 template <class T, class Compare>
 int BTree<T, Compare>::count() const {
-    searchCount([](const T& data) {
+    return searchCount([](const T& data) {
                     return true;
                 }, root);
 };
@@ -124,7 +163,7 @@ int BTree<T, Compare>::count() const {
 
 template <class T, class Compare>
 int BTree<T, Compare>::countEvens() const {
-    searchCount([](const T& data) {
+    return searchCount([](const T& data) {
                     return data % 2 == 0;
                 }, root);
 };
@@ -132,7 +171,7 @@ int BTree<T, Compare>::countEvens() const {
 
 template <class T, class Compare>
 int BTree<T, Compare>::searchCount(bool (*pred)(const T &)) const {
-    searchCount(pred, root);
+    return searchCount(pred, root);
 }
 
 template <class T, class Compare>
@@ -162,7 +201,7 @@ int BTree<T, Compare>::height(const node* root) const {
 
 template <class T, class Compare>
 int BTree<T, Compare>::countLeaves() const {
-    countLeaves(root);
+    return countLeaves(root);
 }
 
 template <class T, class Compare>
