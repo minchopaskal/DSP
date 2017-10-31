@@ -22,25 +22,60 @@ private:
     node* root;
 
 private:
-    node* copy(node*&, const node*);
+    node* copy(const node*);
     void erase(node*&);
+    void insertOrdered(const T&, node*&);
 
-    void insert(const T&, node*&);
+    //int count(const node*) const;
+    //int countEvens(const node*) const;
+    int searchCount(bool (*)(const T&), const node*) const;
+    int height(const node*) const;
+    int countLeaves(const node*) const;
+    const node* maxLeaf(const node*) const;
+    const node* getElement(const char*, const node*) const;
+    const node* getNodeBySymbol(char, const node*) const;
 
-    void print(const node*) const;
+    std::ostream& print(const node*, std::ostream& os = std::cout) const;
+
 public:
     BTree();
+    BTree(const T& data,
+          const BTree<T, Compare>& lt = BTree(),
+          const BTree<T,Compare>& rt = BTree());
     BTree(const BTree&);
     BTree&operator=(BTree);
     ~BTree();
 
     bool empty() const { return root == nullptr; }
-    void insert(const T&);
-    void print() const { print(root); };
+    void insertOrdered(const T&);
+
+    // Redundant function after implementing operator<<
+    //void print() const { print(root); };
+
+    /*
+     * Exercises from
+     * https://github.com/stranxter/lecture-notes/blob/master/homeworks/03_sdp/03_trees/trees.pdf
+     */
+    int count() const;
+    int countEvens() const;
+    int searchCount(bool (*)(const T&)) const;
+    int height() const;
+    int countLeaves() const;
+    const T& maxLeaf() const;
+    const T& getElement(const char*) const;
+
+    // Friend functions:
 
     // Implementing the copy-and-swap idiom
-    friend void swap(BTree<T, Compare>&, BTree<T, Compare>&);
+    template <class S, class Comp>
+    friend void swap(BTree<S, Comp>&, BTree<S, Comp>&);
+    // Output
+    template <class S, class Comp>
+    friend std::ostream&operator<<(std::ostream&, const BTree<S, Comp>&);
 };
+
+template <class T, class Compare>
+std::ostream& operator<<(std::ostream&, const BTree<T, Compare>&);
 
 #include "BTree.cpp"
 
