@@ -155,17 +155,17 @@ void BTree<T, Compare>::printScheme() const {
  */
 template <class T, class Compare>
 int BTree<T, Compare>::count() const {
-    return searchCount([](const T& data) {
-                    return true;
-                }, root);
+    return searchCount([](const T& data) -> bool {
+                           return true;
+                       }, root);
 };
 
 
 template <class T, class Compare>
 int BTree<T, Compare>::countEvens() const {
-    return searchCount([](const T& data) {
-                    return data % 2 == 0;
-                }, root);
+    return searchCount([](const T& data) -> bool {
+                           return data % 2 == 0;
+                       }, root);
 };
 
 

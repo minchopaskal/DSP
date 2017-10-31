@@ -62,7 +62,7 @@ void bTreeTest() {
              << bTree.countEvens(); endl();
 
     std::cout<< "Count of odds in tree: " <<
-    bTree.searchCount([](const int& data) {
+    bTree.searchCount([](const int& data) -> bool {
                           return data % 2 == 1;
                       }); endl();
 
