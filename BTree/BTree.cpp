@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 
 #include "BTree.h"
 
@@ -281,5 +282,127 @@ BTree<T, Compare>::getNodeBySymbol(char symbol, const node* root) const {
             return nullptr;
     }
 }
+
+template <class T, class Compare>
+std::vector<T> BTree<T, Compare>::listLeaves() const {
+    return listLeaves(root);
+}
+
+template <class T, class Compare>
+std::vector<T> BTree<T, Compare>::listLeaves(const node* root) const {
+    if(root == nullptr) {
+        std::vector<T> empty;
+        return empty;
+    }
+
+    if(root->right == nullptr && root->left == nullptr) {
+        std::vector<T> one;
+        one.push_back(root->data);
+        return one;
+    }
+
+    std::vector<T> left = listLeaves(root->left);
+    std::vector<T> right = listLeaves(root->right);
+
+    left.insert(left.end(), right.begin(), right.end());
+    return left;
+}
+
+template <class T, class Compare>
+std::string BTree<T, Compare>::findTrace(const T& x) const {
+    return findTrace(root, x, "");
+}
+
+template <class T, class Compare>
+std::string BTree<T, Compare>::findTrace(const node* root, const T& x, std::string curr) const {
+    if(root == nullptr) {
+        return "error";
+    }
+
+    if(root->data == x) {
+        return curr;
+    }
+
+    std::string leftStr = curr + 'L';
+    std::string left = findTrace(root->left, x, leftStr);
+    if(left != "error") {
+        return left;
+    }
+
+    std::string rgtStr = curr + 'R';
+    std::string right = findTrace(root->right, x, rgtStr);
+    if(right != "error") {
+        return right;
+    }
+
+    return "error";
+}
+
+template <class T, class Compare>
+void BTree<T, Compare>::prettyPrint() const {
+    int line = 0;
+    prettyPrint(root, 0, line);
+}
+
+template <class T, class Compare>
+void BTree<T, Compare>::prettyPrint(const node* root, int depth, int& line) const {
+    if(root == nullptr) {
+        return;
+    }
+
+    prettyPrint(root->right, depth + 1, line); std::cout << std::endl;
+    ++line;
+    std::cout << line << ": ";
+    std::cout << std::setw(depth * 4);
+    std::cout << root->data;
+    prettyPrint(root->left, depth + 1, line);
+}
+
+template <>
+void BTree<char>::parseExpression(std::string expr) {
+    //std::stringstream ss(expr);
+    *this = *parseExpressionSS(expr);
+}
+
+template <>
+BTree<char>* BTree<char>::parseExpressionSS(std::string expr) {
+    // We read '(' or ')'
+    char curr = expr.front();
+    expr = expr.substr(1, expr.length() - 1);
+    if(curr == ')') {
+        return nullptr;
+    }
+
+    curr = expr.front();
+    expr = expr.substr(1, expr.length() - 1);
+
+    /*
+     * 2 Options for curr
+     * curr == '('
+     * curr == digit
+     *
+     */
+
+    BTree<char>* left;
+
+    if(isdigit(curr)) {
+        left = new BTree<char>(curr, nullptr, nullptr);
+    } else {
+        left = parseExpressionSS(expr);
+    }
+
+    char rootChar = expr.front();
+    expr = expr.substr(1, expr.length() - 1);
+// rootChar is ')' or an operation
+    if(rootChar == ')') {
+        rootChar = expr.front();
+        expr = expr.substr(1, expr.length() - 1);
+    }
+
+    BTree<char>* right = parseExpressionSS(expr);
+
+    return new BTree<char>(rootChar, *left, *right);
+
+};
 
 #endif //_BTREE_CPP

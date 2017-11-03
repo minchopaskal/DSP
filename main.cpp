@@ -91,6 +91,30 @@ void bTreeTest() {
     std::cout << "Element at RLR: "
               << bTree.getElement("RLR"); endl();
 
+    std::cout << "Trace of 10: "
+              << bTree.findTrace(10); endl();
+
+    std::cout << "Trace of 25: "
+              << bTree.findTrace(25); endl();
+
+    std::cout << "Trace of 15: "
+              << bTree.findTrace(15); endl();
+
+    std::vector<int> leaves = bTree.listLeaves();
+
+    std::cout << "Leaves of tree: ";
+
+    for(int leave : leaves) {
+        std::cout << leave << " ";
+    }
+    endl();
+
+    std::cout << "Pretty print: ";
+    bTree.prettyPrint();
+
+    BTree<char> exp;
+    exp.parseExpression("(1*(2+3))");
+    std::cout << exp << std::endl;
 }
 
 int main() {

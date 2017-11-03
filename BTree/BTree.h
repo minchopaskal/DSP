@@ -6,6 +6,7 @@
 #define _BTREE_H
 
 #include <ostream>
+#include <vector>
 
 template <class T = int, class Compare = std::less<int>>
 class BTree {
@@ -34,6 +35,10 @@ private:
     const node* maxLeaf(const node*) const;
     const node* getElement(const char*, const node*) const;
     const node* getNodeBySymbol(char, const node*) const;
+    std::vector<T> listLeaves(const node*) const;
+    std::string findTrace(const node*, const T&, std::string) const;
+    void prettyPrint(const node*, int, int&) const;
+    BTree<T, Compare>* parseExpressionSS(std::string);
 
     void printOrdered(const node*, std::ostream& os = std::cout) const;
     void printScheme(const node*, std::ostream& os = std::cout) const;
@@ -66,6 +71,12 @@ public:
     int countLeaves() const;
     const T& maxLeaf() const;
     const T& getElement(const char*) const;
+
+    // Exercises from second homework
+    std::vector<T> listLeaves() const;
+    std::string findTrace(const T&) const;
+    void prettyPrint() const;
+    void parseExpression(std::string);
 
     // Friend functions:
 
