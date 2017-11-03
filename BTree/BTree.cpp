@@ -24,8 +24,11 @@ void swap(BTree<T, Compare>& tree, BTree<T, Compare>& other) {
 
 template <class T, class Compare>
 std::ostream& operator<<(std::ostream& os, const BTree<T,Compare>& tree) {
-    //tree.printOrdered(tree.root, os);
+    os << "Ordered: ";
+    tree.printOrdered(tree.root, os);
+    os << std::endl << "Scheme: ";
     tree.printScheme(tree.root, os);
+    os << std::endl;
     return os;
 };
 
@@ -70,8 +73,8 @@ BTree<T, Compare>::copy(const node* root) {
         return nullptr;
 
     return new node(root->data,
-                    copy(root->right),
-                    copy(root->left));
+                    copy(root->left),
+                    copy(root->right));
 }
 
 template <class T, class Compare>
@@ -154,6 +157,14 @@ void BTree<T, Compare>::printScheme() const {
 /*
  * Functions from exercise
  */
+template <class T, class Compare>
+int BTree<T,Compare>::count(const node* root) const {
+    if(root == nullptr) {
+        return 0;
+    }
+    return 1 + count(root->left) + count(root->right);
+}
+
 template <class T, class Compare>
 int BTree<T, Compare>::count() const {
     return searchCount([](const T& data) -> bool {
@@ -358,51 +369,111 @@ void BTree<T, Compare>::prettyPrint(const node* root, int depth, int& line) cons
     prettyPrint(root->left, depth + 1, line);
 }
 
-template <>
-void BTree<char>::parseExpression(std::string expr) {
-    //std::stringstream ss(expr);
-    *this = *parseExpressionSS(expr);
-}
+// TODO Specialize for BTree<char> only!!!
+template <class T, class Compare>
+BTree<char>* BTree<T, Compare>::parseExpression(std::string e) {
+    std::istringstream expr(e);
+    char curr;
+    // Read '(' or digit
+    expr >> curr;
 
-template <>
-BTree<char>* BTree<char>::parseExpressionSS(std::string expr) {
-    // We read '(' or ')'
-    char curr = expr.front();
-    expr = expr.substr(1, expr.length() - 1);
-    if(curr == ')') {
-        return nullptr;
-    }
-
-    curr = expr.front();
-    expr = expr.substr(1, expr.length() - 1);
-
-    /*
-     * 2 Options for curr
-     * curr == '('
-     * curr == digit
-     *
-     */
+    //Read next
+    expr >> curr;
 
     BTree<char>* left;
+    std::string s;
 
     if(isdigit(curr)) {
-        left = new BTree<char>(curr, nullptr, nullptr);
-    } else {
-        left = parseExpressionSS(expr);
+        left = new BTree<char>(curr);
+    }
+        // Else curr == '('
+    else {
+        expr.putback('('); // <- We've lost the '(' so we add it again
+        getline(expr, s);
+        BTree<char> *left = parseExpression(s);
+        //Read ')'
+        expr >> curr;
     }
 
-    char rootChar = expr.front();
-    expr = expr.substr(1, expr.length() - 1);
-// rootChar is ')' or an operation
-    if(rootChar == ')') {
-        rootChar = expr.front();
-        expr = expr.substr(1, expr.length() - 1);
+    // Read operation (root)
+    expr >> curr;
+    char root = curr;
+
+    // Read either digit or new expr
+    expr >> curr;
+    BTree<char>* right;
+
+    if(isdigit(curr)) {
+        right = new BTree<char>(curr);
+    } else if(curr == '(') {
+        expr.putback('('); // <- We've lost the '(' so we add it again
+        getline(expr, s);
+        right = parseExpression(s);
+        // Read ')'
+        expr >> curr;
     }
 
-    BTree<char>* right = parseExpressionSS(expr);
+    return new BTree<char>(root, *left, *right);
+}
 
-    return new BTree<char>(rootChar, *left, *right);
+// TODO Specialize for BTree<char> only!!!
+template <class T, class Compare>
+double BTree<T, Compare>::calculateExpressionTree() const {
+    return calculateExpressionTree(root);
+}
 
-};
+template <class T, class Compare>
+double BTree<T, Compare>::calculateExpressionTree(const node* root) const {
+    if(isdigit(root->data)) {
+        return root->data - '0';
+    }
+
+    return getOp(root->data)(calculateExpressionTree(root->left),
+                             calculateExpressionTree(root->right));
+}
+
+template <class T, class Compare>
+OP BTree<T, Compare>::getOp(char c) const {
+    switch(c) {
+        case '+':
+            return [](double A , double B) {
+                return A + B;
+            };
+        case '-':
+            return [](double A, double B) {
+                return A - B;
+            };
+        case '*':
+            return [](double A, double B) {
+                return A * B;
+            };
+        default:
+            return [](double A, double B){
+                return A / B;
+            };
+    }
+}
+
+template <class T, class Compare>
+const T& BTree<T, Compare>::operator[](int i) const {
+    return get(root, i);
+}
+
+template <class T, class Compare>
+T& BTree<T, Compare>::get(node* root, int i) const {
+    if(i == 0) {
+        return root->data;
+    }
+    int countLeft = count(root->left);
+    int countRight = count(root->right);
+
+    if(countLeft >= i) {
+        return get(root->left, i-1);
+    }
+    if(countRight >= i - countLeft) {
+        return get(root->right, i - countLeft - 1);
+    }
+    return *(new T());
+}
 
 #endif //_BTREE_CPP

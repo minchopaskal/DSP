@@ -110,11 +110,22 @@ void bTreeTest() {
     endl();
 
     std::cout << "Pretty print: ";
-    bTree.prettyPrint();
+    bTree.prettyPrint(); endl();
 
-    BTree<char> exp;
-    exp.parseExpression("(1*(2+3))");
-    std::cout << exp << std::endl;
+    BTree<char> exprTree = *BTree<>::parseExpression("(2*(2+3))");
+    std::cout << exprTree;
+    std::cout << "Expression Tree result: " << exprTree.calculateExpressionTree();
+    endl();
+
+    std::cout << "Get 0th element: "
+              << bTree[0]; endl();
+
+
+    std::cout << "Get 2nd element: "
+              << bTree[2]; endl();
+
+    std::cout << "Get 4th element: "
+              << bTree[4]; endl();
 }
 
 int main() {

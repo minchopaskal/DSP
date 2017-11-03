@@ -5,8 +5,11 @@
 #ifndef _BTREE_H
 #define _BTREE_H
 
-#include <ostream>
+#include <sstream>
+#include <string>
 #include <vector>
+
+using OP = double (*)(double, double);
 
 template <class T = int, class Compare = std::less<int>>
 class BTree {
@@ -27,7 +30,7 @@ private:
     void erase(node*&);
     void insertOrdered(const T&, node*&);
 
-    //int count(const node*) const;
+    int count(const node*) const;
     //int countEvens(const node*) const;
     int searchCount(bool (*)(const T&), const node*) const;
     int height(const node*) const;
@@ -38,7 +41,9 @@ private:
     std::vector<T> listLeaves(const node*) const;
     std::string findTrace(const node*, const T&, std::string) const;
     void prettyPrint(const node*, int, int&) const;
-    BTree<T, Compare>* parseExpressionSS(std::string);
+    double calculateExpressionTree(const node*) const;
+    OP getOp(char) const;
+    T& get(node*, int) const;
 
     void printOrdered(const node*, std::ostream& os = std::cout) const;
     void printScheme(const node*, std::ostream& os = std::cout) const;
@@ -76,7 +81,11 @@ public:
     std::vector<T> listLeaves() const;
     std::string findTrace(const T&) const;
     void prettyPrint() const;
-    void parseExpression(std::string);
+    static BTree<char>* parseExpression(std::string);
+    // ? ? ?
+    // void parseExpression(std::string);
+    double calculateExpressionTree() const;
+    const T&operator[](int) const;
 
     // Friend functions:
 
@@ -86,10 +95,16 @@ public:
     // Output
     template <class S, class Comp>
     friend std::ostream&operator<<(std::ostream&, const BTree<S, Comp>&);
+
 };
 
 template <class T, class Compare>
 std::ostream& operator<<(std::ostream&, const BTree<T, Compare>&);
+
+
+
+
+
 
 #include "BTree.cpp"
 
