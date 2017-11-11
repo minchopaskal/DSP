@@ -2,3 +2,7 @@ builds/*
 cmake-build-debug/*
 CMakeLists.txt
 .idea/*
+SDP_Homework/.idea/*
+SDP_Homework/cmake-build-debug/*
+SDP_Homework/CMakeLists.txt
+SDP_Homework/*.pdf
