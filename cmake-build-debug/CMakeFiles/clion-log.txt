@@ -1,0 +1,60 @@
+/home/ellie/CLion/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/ellie/Documents/C++/SDP_seminar
+-- The CXX compiler identification is unknown
+-- Check for working CXX compiler: /usr/bin/cmake
+-- Check for working CXX compiler: /usr/bin/cmake -- broken
+CMake Error at /home/ellie/CLion/bin/cmake/share/cmake-3.8/Modules/CMakeTestCXXCompiler.cmake:44 (message):
+  The C++ compiler "/usr/bin/cmake" is not able to compile a simple test
+  program.
+
+  It fails with the following output:
+
+   Change Dir: /home/ellie/Documents/C++/SDP_seminar/cmake-build-debug/CMakeFiles/CMakeTmp
+
+  
+
+  Run Build Command:"/usr/bin/make" "cmTC_91bb9/fast"
+
+  /usr/bin/make -f CMakeFiles/cmTC_91bb9.dir/build.make
+  CMakeFiles/cmTC_91bb9.dir/build
+
+  make[1]: Entering directory
+  '/home/ellie/Documents/C++/SDP_seminar/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+  Building CXX object CMakeFiles/cmTC_91bb9.dir/testCXXCompiler.cxx.o
+
+  /usr/bin/cmake -o CMakeFiles/cmTC_91bb9.dir/testCXXCompiler.cxx.o -c
+  /home/ellie/Documents/C++/SDP_seminar/cmake-build-debug/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+
+
+  CMake Error: The source directory
+  "/home/ellie/Documents/C++/SDP_seminar/cmake-build-debug/CMakeFiles/CMakeTmp/testCXXCompiler.cxx"
+  is a file, not a directory.
+
+  Specify --help for usage, or press the help button on the CMake GUI.
+
+  CMakeFiles/cmTC_91bb9.dir/build.make:65: recipe for target
+  'CMakeFiles/cmTC_91bb9.dir/testCXXCompiler.cxx.o' failed
+
+  make[1]: *** [CMakeFiles/cmTC_91bb9.dir/testCXXCompiler.cxx.o] Error 1
+
+  make[1]: Leaving directory
+  '/home/ellie/Documents/C++/SDP_seminar/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+
+  Makefile:126: recipe for target 'cmTC_91bb9/fast' failed
+
+  make: *** [cmTC_91bb9/fast] Error 2
+
+  
+
+  
+
+  CMake will not be able to correctly generate this project.
+Call Stack (most recent call first):
+  CMakeLists.txt:2 (project)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/ellie/Documents/C++/SDP_seminar/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+See also "/home/ellie/Documents/C++/SDP_seminar/cmake-build-debug/CMakeFiles/CMakeError.log".
