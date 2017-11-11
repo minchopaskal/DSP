@@ -1,7 +1,6 @@
-builds/*
-cmake-build-debug/*
-CMakeLists.txt
-.idea/*
+DS_Implementations/cmake-build-debug/*
+DS_Implementations/CMakeLists.txt
+DS_Implementations/.idea/*
 SDP_Homework/.idea/*
 SDP_Homework/cmake-build-debug/*
 SDP_Homework/CMakeLists.txt
