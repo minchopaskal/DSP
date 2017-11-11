@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/SDP_Homework.dir/main.cpp.o CMakeFiles/SDP_Homework.dir/Editor/Editor.cpp.o CMakeFiles/SDP_Homework.dir/Labyrinth/Labyrinth.cpp.o  -o SDP_Homework 
