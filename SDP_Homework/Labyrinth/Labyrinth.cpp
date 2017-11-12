@@ -1,16 +1,13 @@
-//
-// Created by ellie on 11/11/17.
-//
-
 #include <cmath>
 #include <iostream>
 #include <fstream>
+
 #include "Labyrinth.h"
 
 
 Labyrinth::Labyrinth(const std::string &name) {
-    read(name);
-    findStartEnd();
+    if(not name.empty())
+        read(name);
 }
 
 Labyrinth::~Labyrinth() {
@@ -18,6 +15,41 @@ Labyrinth::~Labyrinth() {
         delete map[i];
     }
     delete map;
+}
+
+bool Labyrinth::isPassable(position next) const {
+    return 0 <= next.first < size &&
+           0 <= next.second < size &&
+           map[next.first][next.second] != '1' &&
+           map[next.first][next.second] != '.';
+}
+
+void Labyrinth::findStartEnd(bool lab) {
+    for(uint i = 0; i < size; ++i) {
+        for (uint j = 0; j < size; ++j) {
+            char curr = map[i][j];
+            if((lab && curr == '*') || curr == 'm') {
+                start.first = i;
+                start.second = j;
+            }
+            if(curr == 'e') {
+                end.first = i;
+                end.second = j;
+            }
+        }
+    }
+}
+
+std::string Labyrinth::getExt(const std::string &name) const{
+    std::string ext;
+    auto it = name.cend();
+
+    for(; *it != '.'; --it) {}
+    for(; it != name.cend(); ++it) {
+        ext += *it;
+    }
+
+    return ext;
 }
 
 bool Labyrinth::findPathRec(position curr) {
@@ -119,30 +151,14 @@ bool Labyrinth::findPath() {
     return false;
 }
 
-bool Labyrinth::isPassable(position next) const {
-    return 0 <= next.first < size &&
-           0 <= next.second < size &&
-           map[next.first][next.second] != '1' &&
-           map[next.first][next.second] != '.';
-}
-
-void Labyrinth::findStartEnd() {
-    for(uint i = 0; i < size; ++i) {
-        for (uint j = 0; j < size; ++j) {
-            char curr = map[i][j];
-            if(curr == 'm') {
-                start.first = i;
-                start.second = j;
-            }
-            if(curr == 'e') {
-                end.first = i;
-                end.second = j;
-            }
-        }
-    }
+void Labyrinth::findDistances() {
+    // TODO
 }
 
 void Labyrinth::read(const std::string &name) {
+    std::string ext = getExt(name);
+
+
     std::string path = "../data/" + name;
     std::ifstream file(path);
 
@@ -170,14 +186,21 @@ void Labyrinth::read(const std::string &name) {
         }
         ++row;
     }
+
+    findStartEnd(ext != "txt");
 }
 
-void Labyrinth::printPath() {
+void Labyrinth::printPathStack() {
     if(findPath()) {
         std::cout << "Oh yea\n";
         return;
     }
     std::cout << "No path!\n";
+}
+
+void Labyrinth::printDistancesQueue() {
+    findDistances();
+    print();
 }
 
 void Labyrinth::print() const {

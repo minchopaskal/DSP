@@ -1,7 +1,3 @@
-//
-// Created by ellie on 11/11/17.
-//
-
 #ifndef SDP_HOMEWORK_EDITOR_H
 #define SDP_HOMEWORK_EDITOR_H
 

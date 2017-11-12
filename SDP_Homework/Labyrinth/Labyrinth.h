@@ -1,12 +1,9 @@
-//
-// Created by ellie on 11/11/17.
-//
-
 #ifndef SDP_HOMEWORK_LABYRINTH_H
 #define SDP_HOMEWORK_LABYRINTH_H
 
 #include <stack>
 #include <string>
+#include <zconf.h>
 
 using position = std::pair<int, int>;
 
@@ -20,13 +17,16 @@ private:
     position start;
     position end;
 
+    bool isPassable(position) const;
+
+    void findStartEnd(bool lab = false);
+
+    std::string getExt(const std::string&) const;
+
     bool findPathRec(position);
     bool findPath();
 
-    bool isPassable(position) const;
-
-    void findStartEnd();
-
+    void findDistances();
 public:
     Labyrinth(const std::string& name = "");
     Labyrinth(const Labyrinth&) = delete;
@@ -34,7 +34,8 @@ public:
     ~Labyrinth();
 
     void read(const std::string&);
-    void printPath();
+    void printPathStack();
+    void printDistancesQueue();
     void print() const;
 };
 
