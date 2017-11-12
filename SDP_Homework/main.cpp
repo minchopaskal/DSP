@@ -10,11 +10,12 @@ int main() {
     testMergeStacks();
     testEditor();
     testDecompressString();
-    testLabyrinth();
+    testMouseLabyrinth();
 
     std::cout << "Queue tests:\n";
     testAllUnique();
     testReverse();
     testOrdered();
     testInterval();
+    testDistanceLabyrinth();
 }

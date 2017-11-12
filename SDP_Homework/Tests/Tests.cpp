@@ -44,13 +44,10 @@ void StackTests::testDecompressString() {
     std::cout << StackFunctions::decompressString("12(B2(Q))") << std::endl;
 }
 
-void StackTests::testLabyrinth() {
+void StackTests::testMouseLabyrinth() {
     Labyrinth labyrinth("lab.txt");
     labyrinth.printPathStack();
 }
-
-
-
 
 void QueueTests::testAllUnique() {
     std::queue<int> unique;
@@ -101,7 +98,13 @@ void QueueTests::testInterval() {
     int a = 3;
     int b = 5;
     int arr[]{6, 7, 8, 10, 3, -1, 5, 2, 4};
-    QueueFunctions::printInterval(arr, sizeof(arr)/sizeof(int), a, b);
+    QueueFunctions::printInterval(arr, 9, a, b);
+    std::cout << std::endl;
+}
+
+void QueueTests::testDistanceLabyrinth() {
+    Labyrinth labyrinth("labyrinth.lab");
+    labyrinth.printDistancesQueue();
 }
 
 

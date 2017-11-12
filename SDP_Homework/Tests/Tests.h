@@ -9,7 +9,7 @@ namespace StackTests {
 
     void testDecompressString();
 
-    void testLabyrinth();
+    void testMouseLabyrinth();
 }
 
 
@@ -19,4 +19,6 @@ namespace QueueTests {
     void testReverse();
     void testOrdered();
     void testInterval();
+
+    void testDistanceLabyrinth();
 }

@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <queue>
 
 #include "Labyrinth.h"
 
@@ -18,9 +19,10 @@ Labyrinth::~Labyrinth() {
 }
 
 bool Labyrinth::isPassable(position next) const {
-    return 0 <= next.first < size &&
-           0 <= next.second < size &&
-           map[next.first][next.second] != '1' &&
+    return 0 <= next.first && next.first < size &&
+           0 <= next.second && next.second < size &&
+           map[next.first][next.second] != 'x' &&
+           map[next.first][next.second] != '*' &&
            map[next.first][next.second] != '.';
 }
 
@@ -98,24 +100,25 @@ bool Labyrinth::findPath() {
 
         position& curr = currPositions.top();
         char& currPos = map[curr.first][curr.second];
-
-
-        currPos = 'm';
-        print();
-
-        if(curr == end) {
-            return true;
-        }
-
-        // Get stack of new positions
         StackPositions newPositions;
-        for(int i = -1; i <= 1; ++i) {
-            for (int j = -1; j <= 1; ++j) {
-                if(abs(i + j) != 1)
-                    continue;
-                position next{curr.first + i, curr.second + j};
-                if (isPassable(next)) {
-                    newPositions.push(next);
+
+        // currPos == '.' when prev step didn't have any new positions
+        if(currPos != '.') {
+            currPos = 'm';
+
+            if(curr == end) {
+                return true;
+            }
+
+            // Get stack of new positions
+            for(int i = -1; i <= 1; ++i) {
+                for (int j = -1; j <= 1; ++j) {
+                    if(abs(i + j) != 1)
+                        continue;
+                    position next{curr.first + i, curr.second + j};
+                    if (isPassable(next)) {
+                        newPositions.push(next);
+                    }
                 }
             }
         }
@@ -130,15 +133,8 @@ bool Labyrinth::findPath() {
             // we remove this set from the stackFrame
             if(currPositions.empty()) {
                 stackFrame.pop();
-
-                // So the prev position wasn't
-                // we remove it
-                stackFrame.top().pop();
             }
 
-            // We move to the next possible
-            // position
-            position& next = stackFrame.top().top();
         } else {
             // Else there are new positions to try
             stackFrame.push(newPositions);
@@ -152,7 +148,40 @@ bool Labyrinth::findPath() {
 }
 
 void Labyrinth::findDistances() {
-    // TODO
+    // Queue of positions and their respective weights
+    std::queue<std::pair<position, int>> queue;
+
+    // Distance to starting position - 0
+    queue.push({start, 0});
+
+    // For every position we look for its neighbours
+    // and assign for each valid one a weight
+    while(!queue.empty()) {
+        weightedPosition& curr = queue.front();
+        position& currPos = queue.front().first;
+
+        // Update map
+        char& posSymbol = map[currPos.first][currPos.second];
+        if(posSymbol == '0' ||
+           curr.second < posSymbol - '0')
+        {
+            posSymbol = curr.second + '0';
+        }
+
+        for(int i = -1; i <= 1; ++i) {
+            for (int j = -1; j <= 1; ++j) {
+                if(abs(i + j) != 1)
+                    continue;
+                position next{currPos.first + i, currPos.second + j};
+                if (isPassable(next)) {
+                    char& nextSym = map[next.first][next.second];
+                    if( nextSym == '0')
+                        queue.push({next, curr.second + 1});
+                }
+            }
+        }
+        queue.pop();
+    }
 }
 
 void Labyrinth::read(const std::string &name) {
@@ -192,7 +221,7 @@ void Labyrinth::read(const std::string &name) {
 
 void Labyrinth::printPathStack() {
     if(findPath()) {
-        std::cout << "Oh yea\n";
+        print();
         return;
     }
     std::cout << "No path!\n";

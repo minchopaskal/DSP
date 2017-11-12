@@ -6,11 +6,14 @@
 #include <zconf.h>
 
 using position = std::pair<int, int>;
+using weightedPosition = std::pair<position, int>;
 
 class Labyrinth {
 private:
     using StackPositions = std::stack<position>;
     using StackFrame = std::stack<StackPositions>;
+
+    //using Queue = std::queue<std::pair<position, int>>;
 
     char** map;
     uint size;
@@ -35,6 +38,7 @@ public:
 
     void read(const std::string&);
     void printPathStack();
+    // We assume no distance is bigger than 9
     void printDistancesQueue();
     void print() const;
 };
