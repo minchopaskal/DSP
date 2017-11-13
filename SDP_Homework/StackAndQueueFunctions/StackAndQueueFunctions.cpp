@@ -151,3 +151,79 @@ void QueueFunctions::printInterval(int* arr, int size, int a, int b) {
     QueueFunctions::printQueue(between);
     QueueFunctions::printQueue(greater);
 }
+
+std::string QueueFunctions::getPathBFS(int** graph, int size, int i, int j) {
+    i -= 1;
+    j -= 1;
+    auto traversed = new bool[size];
+    // We start from i-th node
+    traversed[i] = true;
+
+    // Queue for BFS
+    std::queue<int> toTraverse;
+    toTraverse.push(i);
+
+    /*
+     * BFS
+     */
+    int depth = 1;
+    while(!toTraverse.empty()) {
+        ++depth;
+        int curr = toTraverse.front();
+
+        for(int k = 0; k < size; ++k) {
+            if(graph[curr][k] && !traversed[k]) {
+                toTraverse.push(k);
+                // We put depth as value for each node
+                graph[curr][k] = graph[k][curr] = depth;
+                traversed[k] = true;
+            }
+        }
+        toTraverse.pop();
+        // Stop BFS on end node for optimization
+        if(curr == j) {
+            --depth;
+            break;
+        }
+    }
+    /*
+     * End of BFS
+     */
+    for(int k = 0; k < size; ++k) {
+        for (int l = 0; l < size; ++l)
+            std::cout << graph[k][l] << " ";
+        std::cout << std::endl;
+    }
+
+    // Get path from the depths of nodes
+    std::stack<int> path;
+    int curr = j;
+    path.push(curr + 1);
+    while(depth > 0){
+        for(int k = 0; k < size; ++k) {
+            if(graph[curr][k] == depth) {
+                curr = k;
+                path.push(curr + 1);
+                break;
+            }
+        }
+
+        --depth;
+    }
+
+    // Print path
+    std::stringstream pathString;
+    while(!path.empty()) {
+        int currNode = path.top();
+        path.pop();
+        pathString << currNode << (path.empty() ? "" : " -> ");
+    }
+
+    return pathString.str();
+}
+
+
+
+
+
+

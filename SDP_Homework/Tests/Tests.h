@@ -21,4 +21,6 @@ namespace QueueTests {
     void testInterval();
 
     void testDistanceLabyrinth();
+
+    void testBFS();
 }

@@ -48,4 +48,6 @@ namespace QueueFunctions {
     void printAscending(std::queue<int>);
 
     void printInterval(int* , int, int, int);
+
+    std::string getPathBFS(int**, int, int, int);
 }

@@ -157,6 +157,9 @@ void Labyrinth::findDistances() {
     // For every position we look for its neighbours
     // and assign for each valid one a weight
     while(!queue.empty()) {
+        // We always take the smallest number which is not checked.
+        // That guarantees we will find the shortest path to every
+        // empty cell.
         weightedPosition& curr = queue.front();
         position& currPos = queue.front().first;
 
@@ -175,7 +178,8 @@ void Labyrinth::findDistances() {
                 position next{currPos.first + i, currPos.second + j};
                 if (isPassable(next)) {
                     char& nextSym = map[next.first][next.second];
-                    if( nextSym == '0')
+                    // If its not 0 its therefore the shortest path
+                    if(nextSym == '0')
                         queue.push({next, curr.second + 1});
                 }
             }

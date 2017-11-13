@@ -107,12 +107,34 @@ void QueueTests::testDistanceLabyrinth() {
     labyrinth.printDistancesQueue();
 }
 
+void QueueTests::testBFS() {
 
+    int graphTest[9][9]{
+            {0, 1, 0, 0, 0, 1, 0, 0, 0},
+            {1, 0, 1, 0, 0, 0, 1, 1, 0},
+            {0, 1, 0, 1, 0, 0, 0, 0, 1},
+            {0, 0, 1, 0, 1, 0, 0, 0, 1},
+            {0, 0, 0, 1, 0, 0, 0, 0, 0},
+            {1, 0, 0, 0, 0, 0, 0, 1, 0},
+            {0, 1, 0, 0, 0, 1, 0, 0, 0},
+            {0, 1, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 1, 1, 0, 0, 0, 0, 0}
+    };
 
+    int size = 9;
+    auto graph = new int*[size];
+    for(int i = 0; i < size; ++i) {
+        graph[i] = new int[size];
+    }
 
+    for(int i = 0; i < size; ++i) {
+        for(int j = 0; j < size; ++j) {
+            graph[i][j] = graphTest[i][j];
+        }
+    }
 
-
-
+    std::cout << QueueFunctions::getPathBFS(graph, size, 9, 7);
+}
 
 
 
