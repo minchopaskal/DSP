@@ -15,6 +15,7 @@ List<T>::List(int cnt, T data) :
         for(int i = 0; i < cnt; ++i) {
             push_back(data);
         }
+        head = tail = end_el;
     }
 }
 
@@ -27,10 +28,8 @@ template <typename T>
 List<T>& List<T>::operator=(const List& rhs) {
     if(this != &rhs) {
         emptyList();
-        node* iter = rhs.head;
-        while(iter){
-            push_back(iter->data);
-            iter = iter->next;
+        for(iterator it = rhs.cbegin(); it != rhs.cend(); ++it) {
+            push_back(*it);
         }
     }
     return *this;
@@ -48,12 +47,12 @@ List<T>::~List() {
 }
 
 template <typename T>
-void List<T>::push_back(T data) {
+void List<T>::push_back(const T& data) {
     if(empty()) {
-        head = new node(data, nullptr, nullptr);
+        head = new node(data, nullptr, end_el);
         tail = head;
     } else {
-        node* tmp = new node(data, tail, nullptr);
+        node* tmp = new node(data, tail, end_el);
         tail->next = tmp;
         tail = tmp;
     }
@@ -65,20 +64,22 @@ bool List<T>::pop_back() {
     if(empty())
         return false;
     node* tmp = tail;
-    if(tail)
-        tail = tail->prev;
-    if(tail)
-        tail->next = nullptr;
+    tail = tail->prev;
+    if(tail) {
+        tail->next = end_el;
+    }
     delete tmp;
     --size;
-    if(size <= 1) head = tail;
+    if(empty()) {
+        head = tail = end_el;
+    }
     return true;
 }
 
 template <typename T>
-void List<T>::push_front(T data) {
+void List<T>::push_front(const T& data) {
     if(empty()){
-        head = new node(data, nullptr, nullptr);
+        head = new node(data, nullptr, end_el);
         tail = head;
     } else{
         node* tmp = new node(data, nullptr, head);
@@ -94,12 +95,13 @@ bool List<T>::pop_front() {
         return false;
     node* tmp = head;
     head = head->next;
-    if(head)
+    if(head != end_el) {
         head->prev = nullptr;
-    T tmpData = tmp->data;
+    } else {
+        head = tail = end_el;
+    }
     delete tmp;
     --size;
-    if(size <= 1) tail = head;
     return true;
 }
 
