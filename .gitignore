@@ -1,3 +1,5 @@
+.idea/*
+CMakeLists.txt
 DS_Implementations/cmake-build-debug/*
 DS_Implementations/CMakeLists.txt
 DS_Implementations/.idea/*
