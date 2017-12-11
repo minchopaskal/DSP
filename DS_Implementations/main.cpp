@@ -3,6 +3,7 @@
 #include "BTree/BTree.h"
 #include "List/List.h"
 #include "PriorityQueue/PriorityQueue.h"
+#include "Trie/trie.cpp"
 
 
 void endl() {
@@ -128,12 +129,68 @@ void bTreeTest() {
               << bTree[4]; endl();
 }
 
+void listIteratorsTest() {
+    List<int> l;
+    for(int i = 0; i < 10; ++i) {
+        l.push_back(i);
+    }
+
+    l.pop_back();
+    l.pop_front();
+
+    for(List<int>::iterator it = l.begin(); it != l.end(); ++it) {
+        std::cout << *it << " ";
+    }
+
+    List<int> other = l;
+    for(List<int>::iterator it = other.begin(); it != other.end(); ++it) {
+        std::cout << *it << " ";
+    }
+
+}
+
+void trieTest() {
+    // construct
+    Trie<int> root(5);
+
+    // addChildren test
+    root.addChild(Trie<int>(6))
+        .addChild(Trie<int>(7).addChild(Trie<int>(71)
+                                        .addChild(Trie<int>(711))
+                                        .addChild(Trie<int>(712))
+                                        .addChild(Trie<int>(713)))
+                              .addChild(Trie<int>(72)))
+        .addChild(Trie<int>(8));
+
+    // printDOT test
+    root.printDOT();
+
+    // Copy constructor test
+    Trie<int> other = root;
+    other.printDOT();
+
+    // iterator test
+    std::cout << "Tree \'root\' has these children:\n";
+    for(Trie<int>::iterator it = root.begin(); it != root.end(); ++it) {
+        std::cout << (*it).root() << " ";
+    }
+    endl();
+
+    // distance test
+    std::cout << "Distance of 713 from tree \'roor\' is: " << root.distance(713);
+    endl();
+
+}
+
 int main() {
 //    priorityQueueTest();
 //    endl();
-//    listSortTest();
+//    listSortTest()
+//  bTreeTest();
 
-    bTreeTest();
+//    listIteratorsTest();
+
+    trieTest();
 
     return 0;
 }

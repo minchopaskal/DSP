@@ -9,18 +9,10 @@
 #include "List.h"
 
 template <typename T>
-List<T>::List(int cnt, T data) :
-        head(nullptr), tail(nullptr), size(0) {
-    if(cnt != 0) {
-        for(int i = 0; i < cnt; ++i) {
-            push_back(data);
-        }
-        head = tail = end_el;
-    }
-}
+List<T>::List() : head(nullptr), tail(nullptr), end_el(), size(0) {}
 
 template <typename T>
-List<T>::List(const List& other) : head(nullptr), tail(nullptr), size(0) {
+List<T>::List(const List& other) : head(nullptr), tail(nullptr), end_el(), size(0) {
     *this = other;
 }
 
@@ -28,7 +20,7 @@ template <typename T>
 List<T>& List<T>::operator=(const List& rhs) {
     if(this != &rhs) {
         emptyList();
-        for(iterator it = rhs.cbegin(); it != rhs.cend(); ++it) {
+        for(iterator it = rhs.begin(); it != rhs.end(); ++it) {
             push_back(*it);
         }
     }

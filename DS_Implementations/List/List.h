@@ -14,7 +14,7 @@ private:
         T data;
         node* prev;
         node* next;
-        node(const T& data, node* prev, node* next) {
+        node(const T& data = T(), node* prev = nullptr, node* next = nullptr) {
             this->data = data;
             this->prev = prev;
             this->next = next;
@@ -57,7 +57,7 @@ private:
         return get();
       }
 
-      T operator++() {
+      I operator++() {
         return *this = next();
       }
 
@@ -84,19 +84,16 @@ private:
 
 public:
     using iterator = Iterator;
-    using const_iterator = const Iterator;
     
     // Big four
-    List(int cnt = 0, T data = T());
+    List();
     List(const List&);
     List&operator=(const List&);
     ~List();
 
     // Itarators
-    iterator begin() { return iterator(head); }
-    iterator end() { return iterator(end_el); }
-    const iterator cbegin() const { return iterator(head); }
-    const iterator cend() const { return iterator(end_el); }
+    iterator begin() const { return iterator(head); }
+    iterator end() const { return iterator(end_el); }
 
     // Capacity
     bool empty() const { return size == 0; }
