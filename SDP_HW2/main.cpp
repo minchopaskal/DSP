@@ -1,8 +1,5 @@
-#include <ctime>
 #include <iostream>
 #include "src/lib/CommandLine/cl.h"
-#include "src/lib/List/List.h"
-
 
 int main() {
   CommandLine cl;
