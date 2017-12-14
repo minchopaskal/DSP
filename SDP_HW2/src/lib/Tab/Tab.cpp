@@ -3,6 +3,11 @@
 Tab::Tab(std::string URL) :
   URL(URL), timestamp(time(nullptr)) {}
 
+bool Tab::operator==(const Tab& other) const {
+  return this->getURL().compare(other.getURL()) == 0
+    && this->getTimestamp() == other.getTimestamp();
+}
+
 std::string Tab::getURL() const {
   return this->URL;
 }

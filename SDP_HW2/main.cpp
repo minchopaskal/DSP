@@ -1,35 +1,27 @@
 #include <ctime>
 #include <iostream>
-#include "src/browser/browser.h"
+#include "src/lib/CommandLine/cl.h"
+#include "src/lib/List/List.h"
 
-void wait ( int seconds )
-{
-  clock_t endwait;
-  endwait = clock () + seconds * CLOCKS_PER_SEC ;
-  while (clock() < endwait) {}
-}
 
 int main() {
-  std::cout << "OK!\n";
-  Browser chrome;
+  CommandLine cl;
+  bool exit = false;
+  std::string name;
+  std::cout << "Welcome to the best browser out there. Google and Mozilla\n"
+	    << "are ashamed of theirselves.\n";
+  std::cout << "Please enter your name: ";
+  std::cin >> name;
+  std::cin.get();
+
+  std::cout << "Thank you! For list of commands enter HELP, LIST or ?\n";
   
-  chrome.print();
-  std::cout << std::endl;
-  wait(2);
-  chrome.insert("www.google.com");
-  std::cout << std::endl;
-  chrome.print();
-  chrome.back();
-  wait(2);
-  chrome.go("www.facebook.com");
-  std::cout << std::endl;
-  chrome.print();
-  chrome.sort(true);
-  std::cout << std::endl;
-  chrome.print();
-  std::cout << std::endl;
-  chrome.sort(false);
-  chrome.print();
-  
+  while(!exit) {
+    std::string command;
+    std::cout << name << "> ";
+    std::getline(std::cin, command);
+    cl.performCommand(command);
+    exit = cl.exit();
+  }
   return 0;
 }

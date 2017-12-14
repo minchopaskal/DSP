@@ -99,18 +99,38 @@ bool List<T>::pop_front() {
 
 template <typename T>
 bool List<T>::removeAt(iterator pos) {
-  if(!pos.valid()) return false;
-  
-  node* prv = this->head;
-  node* nxt;
-  iterator cur = begin();
-  for(; cur.next() != pos && prv != nullptr; ++cur, prv = prv->next) {}
-  if(prv && prv->next->next) nxt = prv->next->next;
-  
-  delete prv->next;
-    
+  if(!pos.valid() || pos == end()) return false;
+  if(size == 1) {
+    delete head;
+    delete tail;
+    head = tail = nullptr;
+    --size;
+    return true;
+  }
+
+  node* curr = pos.ptr;
+  node* prv = curr->prev;
+  node* nxt = curr->next;
   prv->next = nxt;
-  nxt->prev = prv;
+  if(nxt && nxt != end_el) {
+    nxt->prev = prv;
+  }
+  delete curr;
+  --size;
+  return true;
+}
+
+template <typename T>
+bool List<T>::insertAt(const T& data, iterator pos) {
+  if(!pos.valid() || pos == end()) return false;
+  node* curr = pos.ptr;
+  node* nxt = curr->next;
+  node* newNode = new node(data, curr, nxt);
+  curr->next = newNode;
+  if(nxt && nxt != end_el) nxt->prev = newNode;
+  if(newNode->next == end_el) tail = newNode;
+  ++size;
+  return true;
 }
 
 template <typename T>

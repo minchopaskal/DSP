@@ -5,16 +5,13 @@ Browser::Browser() : homepage("about:config") {
   current = browser.begin();
 }
 
-Tab Browser::getCurrentTab() {
-  return *current;
-}
-
 void Browser::go(std::string URL) {
   (*current).setURL(URL);
 }
 
 void Browser::insert(std::string URL) {
-  browser.push_back(Tab(URL));
+  browser.insertAt(Tab(URL), current);
+  forward();
 }
 
 void Browser::back() {
@@ -30,7 +27,19 @@ void Browser::forward() {
 }
 
 void Browser::remove() {
-  browser.removeAt(current);
+  if(browser.getSize() == 1) {
+    (*current).setURL(homepage);
+  } else {
+    tit nxt;
+    if(current == browser.last()) nxt = current.prev();
+    else nxt = current.next();
+    
+    browser.removeAt(current);
+    if(browser.getSize() == 1){
+      current = browser.begin();
+    }
+    else current = nxt;
+  }
 }
 
 void Browser::print() const {
@@ -39,10 +48,26 @@ void Browser::print() const {
   }
 }
 
+std::string Browser::getHomepage() const {
+  return homepage;
+}
+
 void Browser::sort(bool byURL) {
+  Tab curr = *current;
   if(byURL) {
     browser.sort<URLComparator>();
   } else {
     browser.sort<TimestampComparator>();
+  }
+  
+  bool success= false;
+  for(tit it = browser.begin(); it != browser.end(); ++it) {
+    if(*it == curr) {
+      current = it;
+      success = true;
+    }
+  }
+  if(!success) {
+    current = browser.last();
   }
 }

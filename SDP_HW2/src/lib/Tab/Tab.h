@@ -11,6 +11,8 @@ private:
 public:
   Tab(std::string URL = "");
 
+  bool operator==(const Tab&) const;
+  
   std::string getURL() const;
   time_t getTimestamp() const;
 

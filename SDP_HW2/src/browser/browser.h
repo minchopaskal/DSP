@@ -17,8 +17,6 @@ private:
 public:
   Browser();
 
-  Tab getCurrentTab();
-  
   void go(std::string);
   void insert(std::string);
   void back();
@@ -26,6 +24,8 @@ public:
   void remove();
   void print() const;
   void sort(bool);
+
+  std::string getHomepage() const;
 };
 
 #endif

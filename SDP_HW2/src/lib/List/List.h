@@ -6,7 +6,9 @@
 #define _LIST_H
 
 #include <cstddef>
+#include <iostream>
 
+// Not the most beautiful implementation ever.
 template <typename T>
 class List {
 private:
@@ -22,16 +24,19 @@ private:
     };
 
     class Iterator {
-    private:
-      node* ptr;
     public:
+      node* ptr;
+    
       using I = Iterator;
       explicit Iterator(node* ptr = nullptr) : ptr(ptr)  {}
+
       I next() const {
         return I(ptr->next);
       }
 
-      I prev() const { return I(ptr->prev); }
+      I prev() const {
+	return I(ptr->prev);
+      }
 
       T& get() const {
         return ptr->data;
@@ -56,7 +61,7 @@ private:
       T& operator*() {
         return get();
       }
-      
+
       I operator++() {
         return *this = next();
       }
@@ -120,7 +125,7 @@ public:
     void push_front(const T&);
     bool pop_front();
     bool removeAt(iterator pos);
-    bool insertAt(iterator pos);
+    bool insertAt(const T&, iterator pos);
     
     // Operations
     template <class Compare>
@@ -198,8 +203,8 @@ public:
       }
 
       // At the end one of the lists is null (or both)
-      // We concatenate the full list at the end of the already
-      // made one.
+      // We concatenate the non-empty list at the end of the already
+      // sorted one.
       if(!h1) {
         curr->next = h2;
         if(h2)
