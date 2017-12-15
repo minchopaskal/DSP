@@ -18,7 +18,7 @@ int main() {
   
   while(!exit) {
     std::string command;
-    std::cout << name << "> ";
+    std::cout << name << " - Tab: " << cl.getBrowser().getCurrent().getURL() << "> ";
     std::getline(std::cin, command);
     cl.performCommand(command);
     exit = cl.exit();
