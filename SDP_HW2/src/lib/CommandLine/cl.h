@@ -30,6 +30,8 @@ public:
   Command readCommand(std::string);
   bool exit() const;
   void listCommands() const;
+
+  const Browser& getBrowser() const;
 };
 
 #endif

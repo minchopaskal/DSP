@@ -108,3 +108,7 @@ void CommandLine::listCommands() const {
 	    << "HELP - prints the current list of commands.\n";
 	    
 }
+
+const Browser& CommandLine::getBrowser() const {
+  return this->br;
+}

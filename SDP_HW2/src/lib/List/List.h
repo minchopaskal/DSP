@@ -8,7 +8,6 @@
 #include <cstddef>
 #include <iostream>
 
-// Not the most beautiful implementation ever.
 template <typename T>
 class List {
 private:
@@ -22,7 +21,7 @@ private:
             this->next = next;
         }
     };
-
+    
     class Iterator {
     public:
       node* ptr;
@@ -203,8 +202,8 @@ public:
       }
 
       // At the end one of the lists is null (or both)
-      // We concatenate the non-empty list at the end of the already
-      // sorted one.
+      // We concatenate the full list at the end of the already
+      // made one.
       if(!h1) {
         curr->next = h2;
         if(h2)

@@ -26,6 +26,7 @@ public:
   void sort(bool);
 
   std::string getHomepage() const;
+  const Tab& getCurrent() const;
 };
 
 #endif

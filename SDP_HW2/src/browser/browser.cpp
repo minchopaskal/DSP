@@ -31,6 +31,7 @@ void Browser::remove() {
     (*current).setURL(homepage);
   } else {
     tit nxt;
+    // We are sure prev is valid since size > 1
     if(current == browser.last()) nxt = current.prev();
     else nxt = current.next();
     
@@ -70,4 +71,8 @@ void Browser::sort(bool byURL) {
   if(!success) {
     current = browser.last();
   }
+}
+
+const Tab& Browser::getCurrent() const {
+  return current.cget();
 }
