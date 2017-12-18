@@ -11,16 +11,12 @@ private:
     T data;
     List<Trie<T>> children;
 
-    void prettyPrint(int depth, std::ostream& os = std::cout) {
+    void prettyPrint(std::ostream& os = std::cout) {
         os << data;
         for(iterator it = begin(); it != end(); ++it) {
-            os << '\n';
-            for(int i = 0; i < depth; ++i) {
-                os << '\t';
-            }
-            os << "-> {";
-            (*it).prettyPrint(depth + 1, os);
-            os << "}";
+            os << " -> ";
+            (*it).prettyPrint(os);
+            os << ';';
         }
     }
 

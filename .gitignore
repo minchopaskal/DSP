@@ -3,6 +3,8 @@ CMakeLists.txt
 DS_Implementations/cmake-build-debug/*
 DS_Implementations/CMakeLists.txt
 DS_Implementations/.idea/*
+Functional/bin/*
+Functional/CmakeLists.txt
 SDP_Homework/.idea/*
 SDP_Homework/cmake-build-debug/*
 SDP_Homework/CMakeLists.txt
