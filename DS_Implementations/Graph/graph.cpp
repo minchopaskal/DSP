@@ -125,6 +125,7 @@ public:
 
   std::stack<T> find_path(const T& start, const T& end) const {
     std::stack<T> path;
+    // If either vertex does not exist return empty path
     if (!is_vertex(start) || !is_vertex(end)) {
       return path;
     }
@@ -134,6 +135,7 @@ public:
     std::stack<std::pair<T, T>> edges;
     q.push(start);
 
+    // BFS the graph adding each edge until we reach the end vertex
     T curr = start;
     while(!q.empty() && (curr = q.front()) != end) {
       q.pop();
@@ -145,17 +147,13 @@ public:
         }
       }
     }
-    /*
-    while(!edges.empty()) {
-      std::cout << '(' << edges.top().first << ", " << edges.top().second << ')' << " ";
-      edges.pop();
-      }*/
-    
-    
+
+    // If BFS didn't reach the end vertex there is no path
     if(curr != end) {
       return path;
     }
 
+    // Follow the edges to figure out the path
     std::pair<T, T> e;
     while(!edges.empty()) {
       e = edges.top();
@@ -166,8 +164,12 @@ public:
       }
     }
 
+    // Since we begin with the start vertex we
+    // can't have put it in the path stack
+    // following the edges only - so let's do it manually
     path.push(start);
-    
+
+    // reverse the stack
     std::stack<T> ordered_path;
     while(!path.empty()) {
       ordered_path.push(path.top());
