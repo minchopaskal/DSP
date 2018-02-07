@@ -171,7 +171,7 @@ private:
 
     // if last element is nullptr the data
     // is not in the tree - we move the closest
-    // one on top
+    // one to it on top
     if (arr[i] == nullptr) {
       --i;
     }
@@ -179,15 +179,46 @@ private:
     // else it is and we should make rotations
     node* g_parent;
     while (i > 0) {
-      g_parent = i > 1 ? arr[i-2] : nullptr;
-      
-      if (arr[i-1]->right == arr[i]) {
-        rotate_left(arr[i-1], g_parent);
-      } else {
-        rotate_right(arr[i-1], g_parent);
-      }
+      bool isLeftChild = arr[i-1]->left == arr[i];
 
-      --i;
+      if (i == 1) {
+        if (isLeftChild) {
+          rotate_right(arr[i-1], nullptr);
+        } else {
+          rotate_left(arr[i-1], nullptr);
+        }
+      } else if (isLeftChild) {
+        if (arr[i-2]->left == arr[i-1]) {
+          if (i > 2) g_parent = arr[i-3];
+          else       g_parent = nullptr;
+          
+          rotate_right(arr[i-2], g_parent);
+          rotate_right(arr[i-2], g_parent);
+        } else { // arr[i-2]->right == arr[i-1]
+          rotate_right(arr[i-1], arr[i-2]);
+
+          if (i > 2) g_parent = arr[i-3];
+          else g_parent = nullptr;
+
+          rotate_left(arr[i-2], g_parent);
+        }
+      } else { // arr[i-1]->right == arr[i]
+        if (arr[i-2]->right == arr[i-1]) {
+          if (i > 2) g_parent = arr[i-3];
+          else       g_parent = nullptr;
+
+          rotate_left(arr[i-2], g_parent);
+          rotate_left(arr[i-2], g_parent);
+        } else { // arr[i-2]->left == arr[i-1]
+          rotate_left(arr[i-1], arr[i-2]);
+
+          if (i > 2) g_parent = arr[i-3];
+          else       g_parent = nullptr;
+
+          rotate_right(arr[i-2], g_parent);
+        }
+      }
+      i -= 2;
     }
 
     root = arr[0];
@@ -208,7 +239,7 @@ private:
     return curr;
   }
 
-  node** resizeArr(node**& arr, int& s) {
+  node** resizeArr(node** arr, int& s) {
     node** newArr = new node*[s + s / 2];
     for (int i = 0; i < s; ++i) {
       newArr[i] = arr[i];
