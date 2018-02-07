@@ -1,9 +1,10 @@
 #ifndef SPLAY_TREE_CPP
 #define SPLAY_TREE_CPP
 
+#include <cmath>
 #include <functional>
 #include <iostream>
-#include <cmath>
+#include <stack>
 
 template <class T, class Comparator = std::less<T>>
 class SplayTree {
@@ -52,15 +53,16 @@ public:
 
   bool
   search(const T& data) {
-    root = _search(data);
+    _search(data);
     return root != nullptr && root->data == data;
   }
 
-  void
+  bool
   insert(const T& data) {
     ++size;
     root = _insert(root, data);
-    root = _search(data);
+    _search(data);
+    return true; // for testing purposes
   }
 
   template <typename... Args> void
@@ -69,14 +71,13 @@ public:
     insert(args...);
   }
 
-  void
+  // TODO
+  bool
   del(const T& data) {
-    root = _search(data);
+    _search(data);
     if (root == nullptr || root->data != data) {
-      return;
+      return false;
     }
-
-    print();
 
     node* leftMaxParent = find_max(root->left);
     node* tmp;
@@ -84,13 +85,21 @@ public:
       tmp = root;
       root = root->right;
       delete tmp;
-      return;
+      --size;
+      return true;
     }
 
     root->data = leftMaxParent->right->data;
     tmp = leftMaxParent->right;
     leftMaxParent->right = tmp->left;
     delete tmp;
+    --size;
+    return true;
+  }
+
+  bool
+  empty() const {
+    return size == 0;
   }
   
   void
@@ -145,11 +154,12 @@ private:
     parent = child;
   }
   
-  node* _search(const T& data) {
+  void
+  _search(const T& data) {
     if (root == nullptr || root->data == data) {
-      return root;
+      return;
     }
-
+    
     int arrSize = 2 * floor(log2l(size));
     node** arr = new node*[arrSize];
     int i = 0;
@@ -157,10 +167,9 @@ private:
 
     // collect the path to the node
     while (arr[i] != nullptr && arr[i]->data != data) {
-      if (i + 1 > arrSize) {
+      while (i + 1 > arrSize) {
         arr = resizeArr(arr, arrSize);
       }
-
       if (cmp(arr[i]->data, data)) {
         arr[i+1] = arr[i]->right;
       } else {
@@ -175,7 +184,7 @@ private:
     if (arr[i] == nullptr) {
       --i;
     }
-
+    
     // else it is and we should make rotations
     node* g_parent;
     while (i > 0) {
@@ -223,10 +232,10 @@ private:
 
     root = arr[0];
     delete[] arr;
-    return root;
   }
 
-  node* _insert(node* curr, const T& data) {
+  node*
+  _insert(node* curr, const T& data) {
     if (curr == nullptr) {
       return new node(data);
     }
@@ -239,8 +248,10 @@ private:
     return curr;
   }
 
-  node** resizeArr(node** arr, int& s) {
-    node** newArr = new node*[s + s / 2];
+  node**
+  resizeArr(node** arr, int& s) {
+    s *= 2;
+    node** newArr = new node*[s];
     for (int i = 0; i < s; ++i) {
       newArr[i] = arr[i];
     }
@@ -254,10 +265,15 @@ private:
     if (root == nullptr) {
       return;
     }
-    
-    erase(root->left);
-    erase(root->right);
-    delete root;
+
+    std::stack<node*> s;
+    while(!s.empty()) {
+      node* curr = s.top();
+      s.pop();
+      if(curr->left) s.push(curr->left);
+      if(curr->right) s.push(curr->right);
+      delete curr;
+    }
   }
 
   node*
