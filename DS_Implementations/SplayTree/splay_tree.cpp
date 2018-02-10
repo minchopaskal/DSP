@@ -5,6 +5,7 @@
 #include <functional>
 #include <iostream>
 #include <stack>
+#include <vector>
 
 template <class T, class Comparator = std::less<T>>
 class SplayTree {
@@ -65,33 +66,35 @@ public:
     return true; // for testing purposes
   }
 
-  template <typename... Args> void
+  // for testing
+  template <typename... Args> void 
   insert(const T& data, Args... args) {
     insert(data);
     insert(args...);
   }
 
-  // TODO
   bool
   del(const T& data) {
     _search(data);
     if (root == nullptr || root->data != data) {
       return false;
     }
-
+    
     node* leftMaxParent = find_max(root->left);
     node* tmp;
     if (leftMaxParent == nullptr) { // root has no left subtree
       tmp = root;
       root = root->right;
-      delete tmp;
-      --size;
-      return true;
+    } else if (leftMaxParent->right == nullptr) { // left child is biggest in the left subtree
+      tmp = root;
+      root = root->left;
+      root->right = tmp->right;
+    } else {
+      root->data = leftMaxParent->right->data;
+      tmp = leftMaxParent->right;
+      leftMaxParent->right = tmp->left;
     }
-
-    root->data = leftMaxParent->right->data;
-    tmp = leftMaxParent->right;
-    leftMaxParent->right = tmp->left;
+    
     delete tmp;
     --size;
     return true;
@@ -154,6 +157,7 @@ private:
     parent = child;
   }
   
+  
   void
   _search(const T& data) {
     if (root == nullptr || root->data == data) {
@@ -167,17 +171,19 @@ private:
 
     // collect the path to the node
     while (arr[i] != nullptr && arr[i]->data != data) {
-      while (i + 1 > arrSize) {
+      while (i + 1 >= arrSize) {
         arr = resizeArr(arr, arrSize);
       }
+      
       if (cmp(arr[i]->data, data)) {
         arr[i+1] = arr[i]->right;
       } else {
         arr[i+1] = arr[i]->left;
       }
+      
       ++i;
     }
-
+    
     // if last element is nullptr the data
     // is not in the tree - we move the closest
     // one to it on top
@@ -250,12 +256,12 @@ private:
 
   node**
   resizeArr(node** arr, int& s) {
-    s *= 2;
-    node** newArr = new node*[s];
+    node** newArr = new node*[2 * s];
     for (int i = 0; i < s; ++i) {
       newArr[i] = arr[i];
     }
 
+    s *= 2;
     delete[] arr;
     return newArr;
   }
