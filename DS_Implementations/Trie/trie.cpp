@@ -19,7 +19,6 @@ private:
             os << ';';
         }
     }
-
 public:
     using iterator = typename List<Trie<T>>::iterator;
     explicit Trie(T const& data = T()) : data(data) {}

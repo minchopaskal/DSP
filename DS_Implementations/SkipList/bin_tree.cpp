@@ -1,6 +1,3 @@
-#ifndef BIN_TREE_CPP
-#define BIN_TREE_CPP
-
 template <class T>
 class BinTree {
 private:
@@ -133,5 +130,3 @@ public:
         return deleteNode(data, root);
     }
 };
-
-#endif

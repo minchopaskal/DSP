@@ -123,6 +123,7 @@ public:
     
   }
 
+  // Finds path as if the graph wasn't weighted 
   std::stack<T> find_path(const T& start, const T& end) const {
     std::stack<T> path;
     // If either vertex does not exist return empty path

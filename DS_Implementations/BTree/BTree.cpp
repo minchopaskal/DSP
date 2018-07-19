@@ -390,7 +390,7 @@ BTree<char>* BTree<T, Compare>::parseExpression(std::string e) {
     else {
         expr.putback('('); // <- We've lost the '(' so we add it again
         getline(expr, s);
-        BTree<char> *left = parseExpression(s);
+        left = parseExpression(s);
         //Read ')'
         expr >> curr;
     }

@@ -1,5 +1,3 @@
-#ifndef SKIP_LIST_CPP
-#define SKIP_LIST_CPP
 #include <cmath>
 #include <ctime>
 #include <functional>
@@ -130,5 +128,3 @@ public:
     }
 
 };
-
-#endif /* SKIP_LIST_CPP */
