@@ -3,22 +3,23 @@
 #include <utility>
 
 #define DEBUG_MODE
+//#define HAS_COLOR_MEMBER_DATA
 
 #define BLACK false
 #define RED   true
 
-//TODO save the color in the address of one of the pointers
 //TODO write remove logic
 
 template <class T, class Compare = std::less<T>>
 class red_black_tree {
 public:
   using color = bool;
-private:
+
   struct node {
-  public:
     T data;
+#ifdef HAS_COLOR_MEMBER_DATA
     color isRed;
+#endif
     node *left, *right;
 
     node (const T& data = T(),
@@ -32,9 +33,34 @@ private:
       set_color(isRed);
     }
 
-    inline void set_color(color isRed) { this->isRed = isRed; }
-    inline bool is_red() const { return isRed; } // for convenience
-  };
+    
+#if defined(HAS_COLOR_MEMBER_DATA)
+    inline node*& get_left() { return left; }
+    inline void set_color(color colorVal) { isRed = colorVal; }
+    inline bool is_red() const { return isRed; } 
+#else
+    // We ASSUME that the compiler aligns the memory
+    
+    node*& get_left() {
+      std::cout << "got_left from the right place\n";
+      left = (node*) (((std::size_t) left) & ~1);
+      return left;
+    }
+
+    void set_color(color colorVal) {
+      if (colorVal == RED) {
+        left = (node*) (((std::size_t) left) | 1);
+      } else {
+        left = (node*) (((std::size_t) left) & ~1);
+      }
+    }
+    
+    bool is_red() const {
+      return 1 & (std::size_t) left;
+    } 
+#endif
+    inline node*& get_right() { return right; } // for consistency
+ };
 
 private:
   node* root;
@@ -43,7 +69,7 @@ private:
 
 public:
   // ==================== Constructors ==================== //
-  red_black_tree() : root(nullptr), backtrack(nullptr)  {}
+  red_black_tree() : root(nullptr), backtrack(nullptr)  { }
 
   red_black_tree(const red_black_tree& other) : root(nullptr), backtrack(nullptr) {
     root = copy(other.root);
@@ -87,8 +113,8 @@ public:
 
     while (backtrack[i] != nullptr) {
       ++i;
-      if (compare(value, backtrack[i-1]->data)) backtrack[i] = backtrack[i-1]->left;
-      else backtrack[i] = backtrack[i-1]->right;
+      if (compare(value, backtrack[i-1]->data)) backtrack[i] = backtrack[i-1]->get_left();
+      else backtrack[i] = backtrack[i-1]->get_right();
       if (i == size) {
         resize_array(backtrack, size);
       }
@@ -100,8 +126,8 @@ public:
     }
 
     node* newNode = new node(value);
-    if (compare(value, backtrack[i-1]->data)) backtrack[i-1]->left = newNode;
-    else backtrack[i-1]->right = newNode;
+    if (compare(value, backtrack[i-1]->data)) backtrack[i-1]->get_left() = newNode;
+    else backtrack[i-1]->get_right() = newNode;
     backtrack[i] = newNode;
     insert_fix(i);
   }
@@ -118,9 +144,9 @@ public:
       }
       
       if (compare(value, curr->data)) {
-        curr = curr->left;
+        curr = curr->get_left();
       } else {
-        curr = curr->right;
+        curr = curr->get_right();
       }
     }
 
@@ -141,8 +167,8 @@ private:
      */
     node *parent, *gparent;
     while (curr > 0 && (parent = backtrack[curr-1])->is_red()) {
-      if (parent == (gparent = backtrack[curr-2])->left) {
-        node* uncle = gparent->right;
+      if (parent == (gparent = backtrack[curr-2])->get_left()) {
+        node* uncle = gparent->get_right();
         if (uncle != nullptr && uncle->is_red()) {
           // Drop the blackness down the tree
           parent->set_color(BLACK);
@@ -150,7 +176,7 @@ private:
           gparent->set_color(RED);
           curr = curr - 2;
         } else { // Rotate so that we drop the height by 1
-          if (backtrack[curr] == parent->right) {
+          if (backtrack[curr] == parent->get_right()) {
             rotate_left(parent, gparent);
           }
           parent->set_color(BLACK);
@@ -159,14 +185,14 @@ private:
           curr -= 3;
         }
       } else { // parent is right child of grand-parent
-        node* uncle = gparent->left;
+        node* uncle = gparent->get_left();
         if (uncle != nullptr && uncle->is_red()) {
           parent->set_color(BLACK);
           uncle->set_color(BLACK);
           gparent->set_color(RED);
           curr = curr - 2;
         } else {
-          if (backtrack[curr] == parent->left) {
+          if (backtrack[curr] == parent->get_left()) {
             rotate_right(parent, gparent);
           }
           parent->set_color(BLACK);
@@ -194,9 +220,9 @@ private:
       return;
     }
     std::cout << "([" << curr->data << ", " << name(curr->is_red()) << "] ";
-    print(curr->left);
+    print(curr->get_left());
     std::cout << ' ';
-    print(curr->right);
+    print(curr->get_right());
     std::cout << ")";
     return;
   }
@@ -208,8 +234,8 @@ private:
     }
 
     node* newNode = new node();
-    newNode->left = copy(other->left);
-    newNode->right = copy(other->right);
+    newNode->get_left() = copy(other->get_left());
+    newNode->get_right() = copy(other->get_right());
     newNode->data = other->data;
     newNode->set_color(other->get_color());
 
@@ -221,41 +247,41 @@ private:
       return;
     }
 
-    erase(curr->left);
-    erase(curr->right);
+    erase(curr->get_left());
+    erase(curr->get_right());
     delete curr;
     
   }
 
   void rotate_left(node*& toRotate, node* parent) {
-    node* rightChild = toRotate->right;
+    node* rightChild = toRotate->get_right();
 
     if (parent == nullptr) {
       root = rightChild;
-    } else  if (parent->left == toRotate) {
-      parent->left = rightChild;
+    } else  if (parent->get_left() == toRotate) {
+      parent->get_left() = rightChild;
     } else {
-      parent->right = rightChild;
+      parent->get_right() = rightChild;
     }
     
-    toRotate->right = rightChild->left;
-    rightChild->left = toRotate;
+    toRotate->get_right() = rightChild->get_left();
+    rightChild->get_left() = toRotate;
     toRotate = rightChild;
   }
 
   void rotate_right(node*& toRotate, node* parent) {
-    node* leftChild = toRotate->left;
+    node* leftChild = toRotate->get_left();
 
     if (parent == nullptr) {
       root = leftChild;
-    } else if (parent->left == toRotate) {
-      parent->left = leftChild;
+    } else if (parent->get_left() == toRotate) {
+      parent->get_left() = leftChild;
     } else {
-      parent->right = leftChild;
+      parent->get_right() = leftChild;
     }
     
-    toRotate->left = leftChild->right;
-    leftChild->right = toRotate;
+    toRotate->get_left() = leftChild->get_right();
+    leftChild->get_right() = toRotate;
     toRotate = leftChild;
   }
 
